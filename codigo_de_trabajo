@@ -1,0 +1,349 @@
+
+import sqlite3
+
+conn = sqlite3.connect("mi_app.db")
+cursor = conn.cursor()
+
+from datetime import datetime
+from sqlalchemy import Column, Integer, String,ForeignKey, Boolean, create_engine, desc,asc,or_,DateTime
+from sqlalchemy.orm import DeclarativeBase, Session
+
+
+class Base(DeclarativeBase):
+  pass
+
+class Autor(Base):
+    __tablename__ = "autor"
+
+    id = Column(Integer, primary_key=True)
+    nombre = Column(String)
+    apellido = Column(String)
+    nacionalidad = Column(String)
+
+
+class Libro(Base):
+    __tablename__ = "libros"
+
+    id = Column(Integer, primary_key=True)
+    titulo = Column(String)
+    isbn = Column(String)
+    anio = Column(DateTime)
+    stock = Column(Integer)
+    autor_id = Column(Integer, ForeignKey("autor.id"))
+
+
+class Socio(Base):
+    __tablename__ = "socio"
+
+    id = Column(Integer, primary_key=True)
+    nombre = Column(String)
+    apellido = Column(String)
+    email = Column(String)
+    estado = Column(Boolean)
+
+
+class Prestamo(Base):
+    __tablename__ = "prestamo"
+
+    id = Column(Integer, primary_key=True)
+    fecha_inicio = Column(DateTime)
+    fecha_devolucion = Column(DateTime)
+    libro_id = Column(Integer, ForeignKey("libros.id"))
+    socio_id = Column(Integer, ForeignKey("socio.id"))
+
+
+engine = create_engine("sqlite:///mi_app.db")
+Base.metadata.create_all(engine)
+
+with Session(engine) as session:   
+ autor=[
+
+         Autor (
+          nombre = "Sara",
+          apellido =  "Sahari" ,
+          nacionalidad="Arabia Saudita"
+         ),
+
+        Autor (
+            nombre = "Tini",
+            apellido =  "Lopez" ,
+            nacionalidad="Colombiana"
+        ),
+
+        Autor(
+             nombre = "Marcos",
+             apellido =  "Feria" ,
+             nacionalidad="Brazilero"
+          
+     
+        ),
+
+        Autor (
+            nombre = "Mariza",
+            apellido =  "Ciruela" ,
+            nacionalidad="Colombiana"
+        ),
+
+        Autor(
+         nombre = "Gustavo",
+         apellido =  "Laurel" ,
+         nacionalidad="Paraguayo"
+        ),
+
+        Autor (
+             nombre = "Manuel",
+             apellido =  "Silpancho" ,
+             nacionalidad="Uruguayo"
+        ),
+
+        Autor (
+             nombre = "Vicky",
+             apellido =  "Loreal" ,
+             nacionalidad="Peruana"
+        ),
+
+
+        Autor (
+            nombre = "Gregorio",
+            apellido =  "Perez" ,
+            nacionalidad="Estadounidense"
+        ),
+
+
+        Autor (
+             nombre = "So-He-Doo",
+             apellido =  "kun" ,
+             nacionalidad="China"
+
+             
+    )
+    ]
+
+
+    
+session.add_all(autor)
+
+session.commit()
+
+ 
+
+with Session(engine) as session:   
+ libro=[
+
+     Libro(
+                titulo = "Balllom",
+                stock=  76 ,
+               
+            ),
+
+        Libro(
+            titulo = "Spiderman",
+            stock=  3 ,
+           
+        ),
+
+        Libro(
+             titulo = "Batman",
+             stock=  9,
+          
+     
+        ),
+
+        Libro (
+            titulo = "Thor",
+            stock=  30,
+        ),
+
+        Libro(
+         titulo = "The nothebook",
+         stock=  20 ,
+        ),
+
+        Libro (
+             titulo = "Escalera al cielo",
+             stock=  40 ,
+        ),
+
+        Libro(
+             titulo = "Noruega",
+            stock=  89 ,
+        ),
+
+
+        Libro (
+            titulo = "Laurence",
+            stock=  0,
+        ),
+
+
+        Libro (
+            titulo = "Uname",
+            stock=  2 ,
+    )
+    ]
+
+
+    
+session.add_all(libro)
+
+session.commit()
+
+
+
+
+
+
+
+with Session(engine) as session:   
+ socio=[
+
+    Socio(
+                nombre= "ari",
+                apellido="Ha-su",
+                email="@ari",
+                estado=True,
+            ),
+
+        Socio(
+            nombre= "Ju-Ri",
+            apellido="Ha-su",
+            email="@Ju-ri",
+            estado=True,
+        ),
+
+        Socio(
+              nombre= "Grecia",
+              apellido="Pepitoo",
+              email="@Grecia",
+              estado=True,
+          
+     
+        ),
+
+        Socio (
+            nombre= "Roma",
+            apellido="Camendia",
+            email="@Roma",
+            estado=True,
+        ),
+
+        Socio(
+         nombre= "Tuli",
+         apellido="Flor",
+         email="@Tuli",
+         estado=False,
+        ),
+
+        Socio (
+            nombre= "Nanci",
+            apellido="tito",
+            email="@Nanci",
+            estado=False,
+        ),
+
+        Socio(
+         nombre= "Sonia",
+         apellido="Hipi",
+         email="@Sonia",
+         estado=True,
+        ),
+
+
+        Socio (
+            nombre= "Tekia",
+            apellido="Aquino",
+            email="@Tekia",
+            estado=False,
+        ),
+
+
+        Socio (
+           nombre= "Ursula",
+           apellido="Camelia",
+           email="@Ursula",
+           estado=False,
+    )
+    ]
+
+
+    
+session.add_all(socio)
+
+session.commit()
+
+
+with Session(engine) as session:   
+ prestamo =[
+
+    Prestamo(
+        fecha_inicio=datetime.now(),
+        fecha_devolucion=datetime(2026, 10, 15, 18, 0),
+        libro_id=1,  # ID existente en la tabla libros
+        socio_id=1,
+    ),
+
+    Prestamo(
+        fecha_inicio=datetime.now(),
+        fecha_devolucion=datetime(2026, 10, 8, 18, 0),
+        libro_id=2,  # ID existente en la tabla libros
+        socio_id=2,
+    ),
+    Prestamo(
+        fecha_inicio=datetime.now(),
+        fecha_devolucion=datetime(2026, 10, 7, 18, 0),
+        libro_id=3,  # ID existente en la tabla libros
+        socio_id=3,
+    ),
+    Prestamo(
+        fecha_inicio=datetime.now(),
+        fecha_devolucion=datetime(2026, 10, 6, 18, 0),
+        libro_id=4,  # ID existente en la tabla libros
+        socio_id=4,
+    ),
+    Prestamo(
+        fecha_inicio=datetime.now(),
+        fecha_devolucion=datetime(2026, 10, 4, 18, 0),
+        libro_id=5,  # ID existente en la tabla libros
+        socio_id=5,
+    ),
+    Prestamo(
+        fecha_inicio=datetime.now(),
+        fecha_devolucion=datetime(2025, 9, 15, 18, 0),
+        libro_id=6,  # ID existente en la tabla libros
+        socio_id=6,
+    ),
+    Prestamo(
+        fecha_inicio=datetime.now(),
+        fecha_devolucion=datetime(2024, 10, 3, 18, 0),
+        libro_id=7,  # ID existente en la tabla libros
+        socio_id=7,
+    ),
+    Prestamo(
+        fecha_inicio=datetime.now(),
+        fecha_devolucion=datetime(2000, 10, 9, 18, 0),
+        libro_id=8,  # ID existente en la tabla libros
+        socio_id=8,
+    ),
+    Prestamo(
+        fecha_inicio=datetime.now(),
+        fecha_devolucion=datetime(2020, 10, 10, 18, 0),
+        libro_id=9,  # ID existente en la tabla libros
+        socio_id=9,
+    )
+    ]
+
+session.add_all(prestamo)
+session.commit()
+
+
+
+
+        
+
+
+
+
+
+
+
+
